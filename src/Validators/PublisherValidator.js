@@ -1,10 +1,10 @@
 const Joi = require('joi');
 
 const publisherSchema = Joi.object({
-  PUBLISHER_NAME: Joi.string().required().messages({
+  publisherName: Joi.string().required().messages({
     'string.empty': 'Publisher Name is required',
   }),
-  ADDRESS: Joi.string().optional(),
+  address: Joi.string().optional(),
 });
 
 module.exports = {

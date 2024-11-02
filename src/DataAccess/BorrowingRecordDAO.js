@@ -11,9 +11,7 @@ class BorrowingRecordDAO {
   }
 
   async getAll() {
-    return await BorrowingRecord.find()
-      .populate('READER_ID')
-      .populate('BOOK_ID');
+    return await BorrowingRecord.find().populate('readerId').populate('bookId');
   }
 
   async update(id, updateData) {

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const publisherSchema = new mongoose.Schema({
-  PUBLISHER_NAME: {
+  publisherName: {
     type: String,
     required: true,
     trim: true,
   },
-  ADDRESS: {
+  address: {
     type: String,
     trim: true,
   },

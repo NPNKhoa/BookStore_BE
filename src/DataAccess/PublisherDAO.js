@@ -11,7 +11,7 @@ class PublisherDAO {
   }
 
   async findByName(publisherName) {
-    return await Publisher.findOne({ PUBLISHER_NAME: publisherName });
+    return await Publisher.findOne({ publisherName });
   }
 
   async update(id, updateData) {

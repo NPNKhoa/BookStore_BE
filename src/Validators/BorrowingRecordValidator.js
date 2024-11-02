@@ -1,17 +1,17 @@
 const Joi = require('joi');
 
 const borrowingRecordSchema = Joi.object({
-  READER_ID: Joi.string().required().messages({
+  readerId: Joi.string().required().messages({
     'string.empty': 'Reader ID is required',
   }),
-  BOOK_ID: Joi.string().required().messages({
+  bookId: Joi.string().required().messages({
     'string.empty': 'Book ID is required',
   }),
-  BORROW_DATE: Joi.date().required().messages({
+  borrowDate: Joi.date().required().messages({
     'date.base': 'Borrow Date must be a valid date',
     'any.required': 'Borrow Date is required',
   }),
-  RETURN_DATE: Joi.date()
+  returnDate: Joi.date()
     .optional()
     .allow(null)
     .greater(Joi.ref('BORROW_DATE'))
