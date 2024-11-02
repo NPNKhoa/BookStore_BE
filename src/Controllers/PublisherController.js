@@ -32,7 +32,7 @@ class PublisherController {
       const publisher = await PublisherService.getPublisherById(
         req.params.publisherId
       );
-      res.json(publisher);
+      res.status(200).json(publisher);
     } catch (error) {
       handleError(error, res);
     }
@@ -58,7 +58,7 @@ class PublisherController {
         req.params.publisherId,
         req.body
       );
-      res.json(publisher);
+      res.status(200).json(publisher);
     } catch (error) {
       handleError(error, res);
     }
@@ -74,7 +74,7 @@ class PublisherController {
 
     try {
       await PublisherService.deletePublisher(req.params.publisherId);
-      res.status(204).end();
+      res.status(204);
     } catch (error) {
       handleError(error, res);
     }
@@ -83,7 +83,7 @@ class PublisherController {
   async getAllPublishers(req, res) {
     try {
       const publishers = await PublisherService.getAllPublishers();
-      res.json(publishers);
+      res.status(200).json(publishers);
     } catch (error) {
       handleError(error, res);
     }
