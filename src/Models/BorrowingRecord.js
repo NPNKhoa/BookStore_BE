@@ -21,7 +21,7 @@ const BorrowingRecordSchema = new mongoose.Schema(
 );
 
 BorrowingRecordSchema.index(
-  { READER_ID: 1, BOOK_ID: 1, BORROW_DATE: 1 },
+  { readerId: 1, bookId: 1, borrowDate: 1 },
   { unique: true }
 );
 

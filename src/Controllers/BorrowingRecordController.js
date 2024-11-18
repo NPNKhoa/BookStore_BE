@@ -23,9 +23,7 @@ class BorrowingRecordController {
 
       const response = await BorrowingRecordService.getBorrowingRecordById(
         record._id
-      )
-        .populate('readerId')
-        .populate('bookId');
+      );
 
       res.status(201).json(response);
     } catch (error) {
@@ -103,7 +101,7 @@ class BorrowingRecordController {
   async deleteBorrowingRecord(req, res) {
     const { id } = req.params;
 
-    const { error } = validateObjectId(id);
+    const error = validateObjectId(id);
 
     if (error) {
       return res

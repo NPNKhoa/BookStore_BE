@@ -7,7 +7,9 @@ class BorrowingRecordDAO {
   }
 
   async getById(id) {
-    return await BorrowingRecord.findById(id);
+    return await BorrowingRecord.findById(id)
+      .populate('readerId')
+      .populate('bookId');
   }
 
   async getAll() {
