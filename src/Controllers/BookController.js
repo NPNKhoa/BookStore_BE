@@ -1,7 +1,8 @@
 const BookService = require('../Services/BookService');
 const { validateBook } = require('../Validators/BookValidator');
 const { validateObjectId } = require('../Validators/commonValidators');
-const handleError = require('../handleError');
+const handleError = require('../Utils/handleError');
+const { NotFoundError } = require('../Utils/Error');
 
 class BookController {
   async createBook(req, res) {
@@ -23,7 +24,7 @@ class BookController {
   }
 
   async getBookById(req, res) {
-    const { error: idError } = validateObjectId(req.params.bookId);
+    const idError = validateObjectId(req.params.bookId);
 
     if (idError) {
       return res
@@ -41,7 +42,7 @@ class BookController {
   }
 
   async updateBook(req, res) {
-    const { error: idError } = validateObjectId(req.params.bookId);
+    const idError = validateObjectId(req.params.bookId);
     if (idError) {
       return res
         .status(400)
@@ -64,7 +65,7 @@ class BookController {
   }
 
   async deleteBook(req, res) {
-    const { error: idError } = validateObjectId(req.params.bookId);
+    const idError = validateObjectId(req.params.bookId);
     if (idError) {
       return res
         .status(400)
@@ -73,15 +74,21 @@ class BookController {
 
     try {
       await BookService.deleteBook(req.params.bookId);
-      res.status(204);
+      res.sendStatus(204);
     } catch (error) {
       handleError(error, res);
     }
   }
 
-  async getAllBooks(req, res) {
+  async getAllBooks(_, res) {
     try {
       const books = await BookService.getAllBooks();
+
+      if (Array.isArray(books) && books.length === 0) {
+        console.log('not found');
+        throw new NotFoundError('Not found any books');
+      }
+
       res.status(200).json(books);
     } catch (error) {
       handleError(error, res);

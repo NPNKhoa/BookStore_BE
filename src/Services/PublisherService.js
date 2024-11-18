@@ -1,5 +1,5 @@
 const PublisherDAO = require('../DataAccess/PublisherDAO');
-const { NotFoundError, ConflictError } = require('../Error.js');
+const { NotFoundError, ConflictError } = require('../Utils/Error');
 
 class PublisherService {
   async createPublisher(publisherData) {
@@ -32,9 +32,11 @@ class PublisherService {
 
   async deletePublisher(id) {
     const publisher = await PublisherDAO.delete(id);
+
     if (!publisher) {
       throw new NotFoundError('Publisher not found');
     }
+
     return publisher;
   }
 

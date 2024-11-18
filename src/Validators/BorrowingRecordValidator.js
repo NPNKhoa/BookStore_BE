@@ -14,7 +14,7 @@ const borrowingRecordSchema = Joi.object({
   returnDate: Joi.date()
     .optional()
     .allow(null)
-    .greater(Joi.ref('BORROW_DATE'))
+    .greater(Joi.ref('borrowDate'))
     .messages({
       'date.base': 'Return Date must be a valid date',
       'date.greater': 'Return Date must be after Borrow Date',

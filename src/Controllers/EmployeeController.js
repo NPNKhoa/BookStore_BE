@@ -1,7 +1,8 @@
 const EmployeeService = require('../Services/EmployeeService');
 const { validateEmployee } = require('../Validators/EmployeeValidator');
 const { validateObjectId } = require('../Validators/commonValidators');
-const handleError = require('../handleError');
+const handleError = require('../Utils/handleError');
+const { NotFoundError } = require('../Utils/Error');
 
 class EmployeeController {
   async createEmployee(req, res) {
@@ -23,7 +24,7 @@ class EmployeeController {
   }
 
   async getEmployeeById(req, res) {
-    const { error: idError } = validateObjectId(req.params.employeeId);
+    const idError = validateObjectId(req.params.employeeId);
 
     if (idError) {
       return res
@@ -43,7 +44,7 @@ class EmployeeController {
   }
 
   async updateEmployee(req, res) {
-    const { error: idError } = validateObjectId(req.params.employeeId);
+    const idError = validateObjectId(req.params.employeeId);
 
     if (idError) {
       return res
@@ -72,7 +73,7 @@ class EmployeeController {
   }
 
   async deleteEmployee(req, res) {
-    const { error: idError } = validateObjectId(req.params.employeeId);
+    const idError = validateObjectId(req.params.employeeId);
 
     if (idError) {
       return res
@@ -83,15 +84,19 @@ class EmployeeController {
     try {
       await EmployeeService.deleteEmployee(req.params.employeeId);
 
-      res.status(204);
+      res.sendStatus(204);
     } catch (error) {
       handleError(error, res);
     }
   }
 
-  async getAllEmployees(req, res) {
+  async getAllEmployees(_, res) {
     try {
       const employees = await EmployeeService.getAllEmployees();
+
+      if (Array.isArray(employees) && employees.length === 0) {
+        throw new NotFoundError('Can not found any employees');
+      }
 
       res.status(200).json(employees);
     } catch (error) {

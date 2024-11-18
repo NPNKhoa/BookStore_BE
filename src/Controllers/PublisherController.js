@@ -1,7 +1,10 @@
 const PublisherService = require('../Services/PublisherService');
-const { validatePublisher } = require('../Validators/PublisherValidator');
+const {
+  validatePublisher,
+  validateUpdatePublisher,
+} = require('../Validators/PublisherValidator');
 const { validateObjectId } = require('../Validators/commonValidators');
-const handleError = require('../handleError');
+const handleError = require('../Utils/handleError');
 
 class PublisherController {
   async createPublisher(req, res) {
@@ -21,11 +24,12 @@ class PublisherController {
   }
 
   async getPublisherById(req, res) {
-    const { error: idError } = validateObjectId(req.params.publisherId);
+    const idError = validateObjectId(req.params.publisherId);
+
+    console.log(idError);
+
     if (idError) {
-      return res
-        .status(400)
-        .json({ errors: idError.details.map((e) => e.message) });
+      return res.status(400).json({ errors: idError });
     }
 
     try {
@@ -39,14 +43,14 @@ class PublisherController {
   }
 
   async updatePublisher(req, res) {
-    const { error: idError } = validateObjectId(req.params.publisherId);
+    const idError = validateObjectId(req.params.publisherId);
     if (idError) {
       return res
         .status(400)
         .json({ errors: idError.details.map((e) => e.message) });
     }
 
-    const { error } = validatePublisher(req.body);
+    const { error } = validateUpdatePublisher(req.body);
     if (error) {
       return res
         .status(400)
@@ -65,7 +69,7 @@ class PublisherController {
   }
 
   async deletePublisher(req, res) {
-    const { error: idError } = validateObjectId(req.params.publisherId);
+    const idError = validateObjectId(req.params.publisherId);
     if (idError) {
       return res
         .status(400)
@@ -74,15 +78,22 @@ class PublisherController {
 
     try {
       await PublisherService.deletePublisher(req.params.publisherId);
-      res.status(204);
+      res.sendStatus(204);
     } catch (error) {
       handleError(error, res);
     }
   }
 
-  async getAllPublishers(req, res) {
+  async getAllPublishers(_, res) {
     try {
       const publishers = await PublisherService.getAllPublishers();
+
+      if (Array.isArray(publishers) && publishers.length === 0) {
+        return res.status(404).json({
+          message: 'Not found publishers',
+        });
+      }
+
       res.status(200).json(publishers);
     } catch (error) {
       handleError(error, res);

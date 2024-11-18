@@ -1,5 +1,5 @@
 const EmployeeDAO = require('../DataAccess/EmployeeDAO');
-const { NotFoundError, ConflictError } = require('../Error.js');
+const { NotFoundError, ConflictError } = require('../Utils/Error');
 
 class EmployeeService {
   async createEmployee(employeeData) {

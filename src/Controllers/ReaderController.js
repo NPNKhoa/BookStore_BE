@@ -1,7 +1,8 @@
 const ReaderService = require('../Services/ReaderService');
 const { validateReader } = require('../Validators/ReaderValidator');
 const { validateObjectId } = require('../Validators/commonValidators');
-const handleError = require('../handleError');
+const handleError = require('../Utils/handleError');
+const { NotFoundError } = require('../Utils/Error');
 
 class ReaderController {
   async createReader(req, res) {
@@ -23,7 +24,7 @@ class ReaderController {
   }
 
   async getReaderById(req, res) {
-    const { error: idError } = validateObjectId(req.params.readerId);
+    const idError = validateObjectId(req.params.readerId);
 
     if (idError) {
       return res
@@ -41,7 +42,7 @@ class ReaderController {
   }
 
   async updateReader(req, res) {
-    const { error: idError } = validateObjectId(req.params.readerId);
+    const idError = validateObjectId(req.params.readerId);
 
     if (idError) {
       return res
@@ -70,7 +71,7 @@ class ReaderController {
   }
 
   async deleteReader(req, res) {
-    const { error: idError } = validateObjectId(req.params.readerId);
+    const idError = validateObjectId(req.params.readerId);
     if (idError) {
       return res
         .status(400)
@@ -79,15 +80,20 @@ class ReaderController {
 
     try {
       await ReaderService.deleteReader(req.params.readerId);
-      res.status(204);
+      res.sendStatus(204);
     } catch (error) {
       handleError(error, res);
     }
   }
 
-  async getAllReaders(req, res) {
+  async getAllReaders(_, res) {
     try {
       const readers = await ReaderService.getAllReaders();
+
+      if (Array.isArray(readers) && readers.length === 0) {
+        throw new NotFoundError('Can not found any readers');
+      }
+
       res.status(200).json(readers);
     } catch (error) {
       handleError(error, res);

@@ -1,5 +1,5 @@
 const BookDAO = require('../DataAccess/BookDAO');
-const { NotFoundError, ConflictError } = require('../Error.js');
+const { NotFoundError, ConflictError } = require('../Utils/Error');
 
 class BookService {
   async createBook(bookData) {

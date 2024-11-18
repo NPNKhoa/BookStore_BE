@@ -1,13 +1,14 @@
 const ReaderDAO = require('../DataAccess/ReaderDAO');
-const { NotFoundError, ConflictError } = require('../Error.js');
+const { NotFoundError, ConflictError } = require('../Utils/Error');
 
 class ReaderService {
   async createReader(readerData) {
-    const existingReaders = ReaderDAO.findByPhone(readerData.phone);
+    const existingReader = await ReaderDAO.findByPhone(readerData.phone);
 
-    if (existingReaders) {
+    if (existingReader) {
       throw new ConflictError('Reader with phone number already exists');
     }
+
     return await ReaderDAO.create(readerData);
   }
 
