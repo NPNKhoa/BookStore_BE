@@ -94,6 +94,21 @@ class BookController {
       handleError(error, res);
     }
   }
+
+  async getAvailableBooks(_, res) {
+    try {
+      const books = await BookService.getAvailableBooks();
+
+      if (Array.isArray(books) && books.length === 0) {
+        console.log('not found');
+        throw new NotFoundError('Not found any books');
+      }
+
+      res.status(200).json(books);
+    } catch (error) {
+      handleError(error, res);
+    }
+  }
 }
 
 module.exports = new BookController();

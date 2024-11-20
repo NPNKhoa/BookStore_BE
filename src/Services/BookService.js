@@ -48,6 +48,10 @@ class BookService {
   async getAllBooks() {
     return await BookDAO.findAll();
   }
+
+  async getAvailableBooks() {
+    return await BookDAO.findAvailable();
+  }
 }
 
 module.exports = new BookService();

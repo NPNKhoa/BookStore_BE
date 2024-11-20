@@ -23,6 +23,10 @@ class BookDAO {
   async findAll() {
     return await Book.find().populate('publisherId');
   }
+
+  async findAvailable() {
+    return await Book.find({ quantity: { $gt: 0 } }).populate('publisherId');
+  }
 }
 
 module.exports = new BookDAO();
