@@ -17,6 +17,7 @@ class BorrowingRecordDAO {
   }
 
   async update(id, updateData) {
+    console.log(updateData);
     return await BorrowingRecord.findByIdAndUpdate(id, updateData, {
       new: true,
     });

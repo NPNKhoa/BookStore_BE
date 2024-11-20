@@ -3,6 +3,7 @@ const { NotFoundError } = require('../Utils/Error');
 const handleError = require('../Utils/handleError');
 const {
   validateBorrowingRecord,
+  validateUpdateBorrowingRecord,
 } = require('../Validators/BorrowingRecordValidator');
 const { validateObjectId } = require('../Validators/commonValidators');
 
@@ -34,7 +35,7 @@ class BorrowingRecordController {
   async getBorrowingRecordById(req, res) {
     const { id } = req.params;
 
-    const { error } = validateObjectId(id);
+    const error = validateObjectId(id);
 
     if (error) {
       return res
@@ -66,7 +67,7 @@ class BorrowingRecordController {
   }
 
   async updateBorrowingRecord(req, res) {
-    const { error } = validateBorrowingRecord(req.body);
+    const { error } = validateUpdateBorrowingRecord(req.body);
 
     if (error) {
       return res
@@ -85,9 +86,13 @@ class BorrowingRecordController {
     }
 
     try {
+      const updateInfo = {
+        returnDate: req.body.returnDate,
+      };
+
       const record = await BorrowingRecordService.updateBorrowingRecord(
         id,
-        req.body
+        updateInfo
       );
 
       if (!record) return res.status(404).json({ error: 'Record not found' });

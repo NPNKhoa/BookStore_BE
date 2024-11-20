@@ -40,8 +40,26 @@ const borrowingRecordSchema = Joi.object({
     }),
 });
 
+const updateBorrowingRecordSchema = Joi.object({
+  borrowDate: Joi.date().required().messages({
+    'date.base': 'Borrow Date must be a valid date',
+    'any.required': 'Borrow Date is required',
+  }),
+  returnDate: Joi.date()
+    .optional()
+    .allow(null)
+    .greater(Joi.ref('borrowDate'))
+    .messages({
+      'date.base': 'Return Date must be a valid date',
+      'date.greater': 'Return Date must be after Borrow Date',
+    }),
+});
+
 module.exports = {
   validateBorrowingRecord(data) {
     return borrowingRecordSchema.validate(data, { abortEarly: false });
+  },
+  validateUpdateBorrowingRecord(data) {
+    return updateBorrowingRecordSchema.validate(data, { abortEarly: false });
   },
 };
