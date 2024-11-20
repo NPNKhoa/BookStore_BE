@@ -12,6 +12,7 @@ const readerRoutes = require('./Routes/ReaderRoutes.js');
 const employeeRoutes = require('./Routes/EmployeeRoutes.js');
 const borrowingRecordRoutes = require('./Routes/BorrowingRecordRoutes.js');
 const authRoutes = require('./Routes/AuthenticationRoutes.js');
+const statRoutes = require('./Routes/StatisticRoutes.js');
 
 dotenv.config({ path: `${process.cwd()}/.env` });
 
@@ -34,6 +35,7 @@ app.use('/api/books', bookRoutes);
 app.use('/api/readers', readerRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/borrowingRecords', borrowingRecordRoutes);
+app.use('/api/stat', statRoutes);
 app.use('/api/auth', authRoutes);
 
 app.use('*', (_, res) => {
