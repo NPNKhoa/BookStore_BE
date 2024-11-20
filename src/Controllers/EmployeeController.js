@@ -3,6 +3,7 @@ const { validateEmployee } = require('../Validators/EmployeeValidator');
 const { validateObjectId } = require('../Validators/commonValidators');
 const handleError = require('../Utils/handleError');
 const { NotFoundError } = require('../Utils/Error');
+const bcrypt = require('bcrypt');
 
 class EmployeeController {
   async createEmployee(req, res) {
@@ -15,9 +16,14 @@ class EmployeeController {
     }
 
     try {
-      const employee = await EmployeeService.createEmployee(req.body);
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-      res.status(201).json(employee);
+      await EmployeeService.createEmployee({
+        ...req.body,
+        password: hashedPassword,
+      });
+
+      res.status(201).json({ message: 'Employee created successfully' });
     } catch (error) {
       handleError(error, res);
     }

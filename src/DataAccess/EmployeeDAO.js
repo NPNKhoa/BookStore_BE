@@ -21,6 +21,10 @@ class EmployeeDAO {
   async findAll() {
     return await Employee.find();
   }
+
+  async findByPhone(phone) {
+    return await Employee.findOne({ phone });
+  }
 }
 
 module.exports = new EmployeeDAO();
